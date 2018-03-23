@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Cadastro</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w"
+        crossorigin="anonymous">
+    <style>
+        .input {
+            width: 100%;
+            margin: 0 0 0.5em 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="pure-menu pure-menu-horizontal">
+            <ul class="pure-menu-list">
+                    <li class="pure-menu-item">
+                        <a href="index.html" class="pure-menu-link">Cadastrar</a>
+                    </li>
+                    <li class="pure-menu-item">
+                        <a href="update.html" class="pure-menu-link">Atualizar</a>
+                    </li>
+                    <li class="pure-menu-item">
+                        <a href="consulta.html" class="pure-menu-link">Consulta</a>
+                    </li>
+                </ul>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1-3"></div>
+        <div class="pure-u-1-3">
+            <form class="pure-form" id="form">
+                <fieldset>
+                    <legend>Faça o cadastro</legend>
+                    <input id="nome" class="input" type="text" placeholder="Nome">
+                    <input id="email" class="input" type="email" placeholder="Email">
+                    <input id="idade" class="input" type="number" placeholder="Idade">
+                    <input maxlength="11" id="documento" class="input" type="number" placeholder="Documento">
+                    <select id="tipoCliente" class="input">
+                        <option disabled selected>Tipo de Cliente</option>
+                        <option>Fisica</option>
+                        <option>Juridica</option>
+                    </select>
+                    <input id="endereco" class="input" type="text" placeholder="Endereço">
+                    <button onclick="cadastrarCliente()" class="pure-button pure-button-primary">Cadastrar</button>
+                </fieldset>
+            </form>
+        </div>
+        <div class="pure-u-1-3"></div>
+    </div>
+</body>
+<script>
+    function cadastrarCliente() {
+        var nome = document.getElementById("nome").value
+        var email = document.getElementById("email").value
+        var idade = document.getElementById("idade").value
+        var documento = document.getElementById("documento").value
+        var tipoCliente = document.getElementById("tipoCliente").value
+        var endereco = document.getElementById("endereco").value
+        if (validateEmail(email) && documento.length == 11) {
+            var objCliente = [
+                nome.trim(),
+                email,
+                idade,
+                documento,
+                tipoCliente,
+                endereco
+            ]
+            localStorage.setItem(nome.trim(), objCliente);
+
+            document.getElementById("nome").value = ""
+            document.getElementById("email").value = ""
+            document.getElementById("idade").value = ""
+            document.getElementById("documento").value = ""
+            document.getElementById("tipoCliente").value = "Tipo Cliente"
+            document.getElementById("endereco").value = ""
+            alert("Cadastrado com sucesso")
+        } else {
+            alert("PREENCHA OS CAMPOS DE MANEIRA CORRETA")
+        }
+    }
+    function validateEmail(email) {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
+</script>
+
+</html>

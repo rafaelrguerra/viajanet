@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Cadastro</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w"
+        crossorigin="anonymous">
+    <style>
+        .input {
+            width: 100%;
+            margin: 0 0 0.5em 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="pure-menu pure-menu-horizontal">
+            <ul class="pure-menu-list">
+                    <li class="pure-menu-item">
+                        <a href="index.html" class="pure-menu-link">Cadastrar</a>
+                    </li>
+                    <li class="pure-menu-item">
+                        <a href="update.html" class="pure-menu-link">Atualizar</a>
+                    </li>
+                    <li class="pure-menu-item">
+                        <a href="consulta.html" class="pure-menu-link">Consulta</a>
+                    </li>
+                </ul>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1-3"></div>
+        <div class="pure-u-1-3">
+                <input id="busca"  type="text" placeholder="Digite o nome do cliente">
+                <button onclick="buscarCliente()" class="pure-button pure-button-primary">Consultar</button>
+                <table class="pure-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Idade</th>
+                                <th>Documento</th>
+                                <th>Tipo Cliente</th>
+                                <th>Endereço</th>
+                            </tr>
+                        </thead>
+                    
+                        <tbody>
+                            <tr>
+                                <td id="nome"></td>
+                                <td id="email"></td>
+                                <td id="idade"></td>
+                                <td id="documento"></td>
+                                <td id="tipoCliente"></td>
+                                <td id="endereco"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+        </div>
+        <div class="pure-u-1-3"></div>
+    </div>
+</body>
+<script>
+window.onload="buscarClientes()";
+
+function buscarCliente(){
+   var nome = (document.getElementById("busca").value).trim()
+ 
+   var objCliente = localStorage.getItem(nome)
+   if(objCliente == undefined){
+       alert("Cliente não encontrado")
+   } else {
+    var array = objCliente.split(',');
+       console.log(array)
+        document.getElementById("nome").innerHTML = array[0]
+        document.getElementById("email").innerHTML = array[1]
+        document.getElementById("idade").innerHTML = array[2]
+        document.getElementById("documento").innerHTML = array[3]
+        document.getElementById("tipoCliente").innerHTML = array[4]
+        document.getElementById("endereco").innerHTML = array[5]
+   }
+}
+
+</script>
+
+</html>
