@@ -37,7 +37,7 @@
                     <input id="nome" class="input" type="text" placeholder="Nome">
                     <input id="email" class="input" type="email" placeholder="Email">
                     <input id="idade" class="input" type="number" placeholder="Idade">
-                    <input maxlength="11" id="documento" class="input" type="number" placeholder="Documento">
+                    <input maxlength="18" id="documento" class="input" type="text" placeholder="Documento">
                     <select id="tipoCliente" class="input">
                         <option disabled selected>Tipo de Cliente</option>
                         <option>Fisica</option>
@@ -53,13 +53,14 @@
 </body>
 <script>
     function cadastrarCliente() {
-        var nome = document.getElementById("nome").value
-        var email = document.getElementById("email").value
-        var idade = document.getElementById("idade").value
-        var documento = document.getElementById("documento").value
-        var tipoCliente = document.getElementById("tipoCliente").value
-        var endereco = document.getElementById("endereco").value
-        if (validateEmail(email) && documento.length == 11) {
+        var nome = document.getElementById("nome").value;
+        var email = document.getElementById("email").value;
+        var idade = document.getElementById("idade").value;
+        var documento = document.getElementById("documento").value;
+        var tipoCliente = document.getElementById("tipoCliente").value;
+        var endereco = document.getElementById("endereco").value;
+		
+        if ((validateEmail(email) && tipoCliente == "Fisica" && TestaCPF(documento)) || validateEmail(email) && tipoCliente == "Juridica" && TestaCNPJ(documento) ) {
             var objCliente = [
                 nome.trim(),
                 email,
@@ -69,7 +70,6 @@
                 endereco
             ]
             localStorage.setItem(nome.trim(), objCliente);
-
             document.getElementById("nome").value = ""
             document.getElementById("email").value = ""
             document.getElementById("idade").value = ""
@@ -85,6 +85,48 @@
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(String(email).toLowerCase());
     }
+	
+	function TestaCPF(strCPF) {
+		var Soma;
+		var Resto;
+		Soma = 0;
+		if (strCPF == "00000000000") return false;
+		
+		for (i=1; i<=9; i++) Soma = Soma + parseInt(strCPF.substring(i-1, i)) * (11 - i);
+		Resto = (Soma * 10) % 11;
+		
+		if ((Resto == 10) || (Resto == 11))  Resto = 0;
+		if (Resto != parseInt(strCPF.substring(9, 10)) ) return false;
+		
+		Soma = 0;
+		for (i = 1; i <= 10; i++) Soma = Soma + parseInt(strCPF.substring(i-1, i)) * (12 - i);
+		Resto = (Soma * 10) % 11;
+		
+		if ((Resto == 10) || (Resto == 11))  Resto = 0;
+		if (Resto != parseInt(strCPF.substring(10, 11) ) ) return false;
+		return true;
+	}
+	
+	function TestaCNPJ(c) {
+		var b = [6,5,4,3,2,9,8,7,6,5,4,3,2];
+
+		if((c = c.replace(/[^\d]/g,"")).length != 14)
+			return false;
+
+		if(/0{14}/.test(c))
+			return false;
+
+		for (var i = 0, n = 0; i < 12; n += c[i] * b[++i]);
+			if(c[12] != (((n %= 11) < 2) ? 0 : 11 - n))
+				return false;
+
+		for (var i = 0, n = 0; i <= 12; n += c[i] * b[i++]);
+			if(c[13] != (((n %= 11) < 2) ? 0 : 11 - n))
+				return false;
+
+		return true;
+	};
+
 </script>
 
 </html>
